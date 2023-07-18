@@ -1,0 +1,70 @@
+- name: Check host | Deploy T-POT
+  hosts: localhost
+  become: yes
+
+- name: Deploy instances
+  hosts: localhost
+  tasks:
+    - name: apt update
+      apt: update_cache=yes cache_valid_time=3600
+
+    - name: apt upgrade
+      apt: upgrade=dist force_apt_get=yes
+
+    # install python
+    - name: install python3 (just in case)
+      ansible.builtin.apt:
+        name: python3
+        state: latest
+        install_recommends: yes
+
+    # install pip3
+    - name: install pip3
+      ansible.builtin.apt:
+        name: python3-pip
+        state: latest
+        install_recommends: yes
+
+    # install git
+    - name: install git
+      ansible.builtin.apt:
+        name: git
+        state: latest
+        install_recommends: yes
+
+    # Mkdir "tpoce"
+    - name: create direcotry "tpotce"
+      ansible.builtin.file:
+        path: /usr/local/lib/python3.9/dist-packages/ansible/tpotce
+        state: directory
+        mode: "0755"
+
+    # Clone github repo
+    - name: Clone repo T-Pot
+      ansible.builtin.git:
+        repo: "https://github.com/telekom-security/tpotce.git"
+        dest: /usr/local/lib/python3.9/dist-packages/ansible/tpotce
+
+    # --[CRIT]--
+    # Set => tpot.conf.dist
+    - name: create tpot.conf.dist
+      copy:
+        dest: /usr/local/lib/python3.9/dist-packages/ansible/tpotce/iso/installer/tpot.conf.dist
+        content: |
+          # tpot configuration file
+          # myCONF_TPOT_FLAVOR=[STANDARD, SENSOR, INDUSTRIAL, COLLECTOR, NEXTGEN, MEDICAL]
+          myCONF_TPOT_FLAVOR='STANDARD'
+          myCONF_WEB_USER='hnpot'
+          myCONF_WEB_PW='dl2023'
+
+    # install tpot
+    - name: install tpot
+      shell:
+        cmd: ./install.sh --type=auto --conf=/usr/local/lib/python3.9/dist-packages/ansible/tpotce/iso/installer/tpot.conf.dist
+        chdir: /usr/local/lib/python3.9/dist-packages/ansible/tpotce
+      notify: reboot host
+
+    # reboot host
+  handlers:
+    - name: reboot host
+      shell: shutdown -r +1
