@@ -54,8 +54,8 @@
           # tpot configuration file
           # myCONF_TPOT_FLAVOR=[STANDARD, SENSOR, INDUSTRIAL, COLLECTOR, NEXTGEN, MEDICAL]
           myCONF_TPOT_FLAVOR='STANDARD'
-          myCONF_WEB_USER='hnpot'
-          myCONF_WEB_PW='dl2023'
+          myCONF_WEB_USER='user_web'
+          myCONF_WEB_PW='passwd_web'
 
     # install tpot
     - name: install tpot
