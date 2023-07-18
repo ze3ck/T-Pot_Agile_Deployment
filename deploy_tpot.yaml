@@ -1,8 +1,9 @@
-- name: Check host | Deploy T-POT
+---
+- name: deploy T-POT
   hosts: localhost
   become: yes
 
-- name: Deploy instances
+- name: deploy instances
   hosts: localhost
   tasks:
     - name: apt update
@@ -32,7 +33,7 @@
         state: latest
         install_recommends: yes
 
-    # Mkdir "tpoce"
+    # Mkdir "tpotce"
     - name: create direcotry "tpotce"
       ansible.builtin.file:
         path: /usr/local/lib/python3.9/dist-packages/ansible/tpotce
@@ -40,12 +41,11 @@
         mode: "0755"
 
     # Clone github repo
-    - name: Clone repo T-Pot
+    - name: clone repo T-Pot
       ansible.builtin.git:
         repo: "https://github.com/telekom-security/tpotce.git"
         dest: /usr/local/lib/python3.9/dist-packages/ansible/tpotce
 
-    # --[CRIT]--
     # Set => tpot.conf.dist
     - name: create tpot.conf.dist
       copy:
