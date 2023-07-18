@@ -47,15 +47,15 @@
         dest: /usr/local/lib/python3.9/dist-packages/ansible/tpotce
 
     # Set => tpot.conf.dist
-    - name: create tpot.conf.dist
+    - name: set parameters tpot.conf.dist
       copy:
         dest: /usr/local/lib/python3.9/dist-packages/ansible/tpotce/iso/installer/tpot.conf.dist
         content: |
           # tpot configuration file
           # myCONF_TPOT_FLAVOR=[STANDARD, SENSOR, INDUSTRIAL, COLLECTOR, NEXTGEN, MEDICAL]
           myCONF_TPOT_FLAVOR='STANDARD'
-          myCONF_WEB_USER='user_web'
-          myCONF_WEB_PW='passwd_web'
+          myCONF_WEB_USER='web_user'
+          myCONF_WEB_PW='web_passwd'
 
     # install tpot
     - name: install tpot
