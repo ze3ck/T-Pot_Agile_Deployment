@@ -34,7 +34,7 @@
         install_recommends: yes
 
     # Mkdir "tpotce"
-    - name: create direcotry "tpotce"
+    - name: create directory "tpotce"
       ansible.builtin.file:
         path: /usr/local/lib/python3.9/dist-packages/ansible/tpotce
         state: directory
